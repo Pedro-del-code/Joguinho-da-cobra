@@ -339,7 +339,7 @@ function init() {
   score = 0;
   level = 1;
   particles = [];
-  best = parseInt(localStorage.getItem('snake_best') || '0');
+  try { best = parseInt(localStorage.getItem('snake_best') || '0'); } catch(e) { best = 0; }
   updateHUD();
   placeFood();
 }
@@ -586,7 +586,7 @@ function gameOver() {
   clearInterval(intervalId);
   if (score > best) {
     best = score;
-    localStorage.setItem('snake_best', best);
+    try { localStorage.setItem('snake_best', best); } catch(e) {}
   }
   setTimeout(() => {
     const overlay = document.getElementById('overlay');
@@ -598,12 +598,16 @@ function gameOver() {
   }, 400);
 }
 
+let animLoopStarted = false;
 function startGame() {
   document.getElementById('overlay').classList.add('hidden');
   init();
   running = true;
   restartLoop();
-  animLoop();
+  if (!animLoopStarted) {
+    animLoopStarted = true;
+    animLoop();
+  }
 }
 
 // Keyboard
@@ -647,6 +651,7 @@ startBtn.addEventListener('touchend', function(e) {
 // Initial draw
 init();
 draw();
+animLoopStarted = true;
 animLoop();
 </script>
 </body>
