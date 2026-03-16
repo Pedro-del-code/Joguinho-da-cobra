@@ -637,7 +637,12 @@ addCtrl('btn-down',  {x:0,y:1});
 addCtrl('btn-left',  {x:-1,y:0});
 addCtrl('btn-right', {x:1,y:0});
 
-document.getElementById('start-btn').addEventListener('click', startGame);
+const startBtn = document.getElementById('start-btn');
+startBtn.addEventListener('click', startGame);
+startBtn.addEventListener('touchend', function(e) {
+  e.preventDefault();
+  startGame();
+});
 
 // Initial draw
 init();
